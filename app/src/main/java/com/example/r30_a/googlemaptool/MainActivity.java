@@ -9,7 +9,9 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
 
+import com.example.r30_a.googlemaptool.view.MyFloatButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -17,25 +19,27 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback , View.OnClickListener{
 
     private GoogleMap mMap;
     private LocationManager locationManager;
+    private MyFloatButton floatButton;
 
-    public static final int LOCATION_UPDATE_MIN_DISTANCE = 10;
+    public static final int LOCATION_UPDATE_MIN_DISTANCE = 20;
     public static final int LOCATION_UPDATE_MIN_TIME = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        floatButton = (MyFloatButton)findViewById(R.id.fab);
+        floatButton.setOnClickListener(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         getCurrentLocation();
-
-
+        
     }
 
 
@@ -73,7 +77,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.addMarker(new MarkerOptions()
                     .position(gps)
                     .title("you are here"));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(gps, 12));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(gps, 15));
         }
 
 
@@ -108,6 +112,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
         if(location != null){
             drawMarker(location);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.fab:
+                getCurrentLocation();
+                break;
+
         }
     }
 }
