@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">GoogleMapTool</string>
     <string name="title_activity_main">Map</string>
+
+    <string-array name="mapSpinnerList">
+        <item>請選擇要顯示的項目</item>
+        <item>愛心停車格</item>
+
+    </string-array>
 </resources>
