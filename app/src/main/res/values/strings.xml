@@ -5,6 +5,7 @@
     <string-array name="mapSpinnerList">
         <item>請選擇要顯示的項目</item>
         <item>愛心停車格</item>
+        <item>測速照相</item>
 
     </string-array>
 </resources>

@@ -24,6 +24,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.ParsedRequestListener;
+import com.example.r30_a.googlemaptool.data.Result;
+import com.example.r30_a.googlemaptool.data.SpeedCamera;
 import com.example.r30_a.googlemaptool.view.MyFloatButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,6 +38,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,13 +51,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-public class MainActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener ,AdapterView.OnItemSelectedListener{
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private GoogleMap mMap;
     private LocationManager locationManager;
     private MyFloatButton floatButton;
     private double gpsLat, gpsLng;
     private Spinner mapSpinner;
+    private List<SpeedCamera> speedCamList = new ArrayList<>();
+    Geocoder geocoder;
 
     public static final int LOCATION_UPDATE_MIN_DISTANCE = 2000;
     public static final int LOCATION_UPDATE_MIN_TIME = 5000;
@@ -60,7 +69,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        
+        AndroidNetworking.initialize(getApplicationContext());
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -70,14 +80,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void init() {
+        geocoder = new Geocoder(this, Locale.getDefault());
         floatButton = (MyFloatButton) findViewById(R.id.fab);
         floatButton.setOnClickListener(this);
-        mapSpinner = (Spinner)findViewById(R.id.mapSpinner);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        ArrayAdapter adapter =ArrayAdapter.createFromResource(this,R.array.mapSpinnerList,
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.mapSpinnerList,
                 android.R.layout.simple_dropdown_item_1line);
+        mapSpinner = (Spinner) findViewById(R.id.mapSpinner);
         mapSpinner.setAdapter(adapter);
         mapSpinner.setOnItemSelectedListener(this);
 
@@ -87,7 +98,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        getCurrentLocation();
+        getCurrentLocation();//取得當前定位
 
     }
 
@@ -117,14 +128,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             gpsLat = location.getLatitude();
             gpsLng = location.getLongitude();
-            LatLng gps = new LatLng(gpsLat,gpsLng);
+            LatLng gps = new LatLng(gpsLat, gpsLng);
 
             mMap.addMarker(new MarkerOptions()
                     .position(gps)
                     .title("you are here"));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(gps, 15));
         }
-
 
     }
 
@@ -146,7 +156,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
             }
-//            if (isGPSEnable) {
+//            if (isGPSEnable) {這個會不準= =
 //
 //                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
 //                        LOCATION_UPDATE_MIN_TIME, LOCATION_UPDATE_MIN_DISTANCE,
@@ -171,7 +181,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-//取得周遭附設愛心停車位的資料
+    //取得周遭附設愛心停車位的資料
     public void getParkingData() {
         //來源網址：台北市政府資料開放平台
         String dataSrc = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=69be3cc8-5099-4cc1-8c0d-94098188bb71";
@@ -189,32 +199,31 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         });
         Volley.newRequestQueue(this).add(objectRequest);
 
-
     }
 
     public void parseJson(JSONObject jsonObject) {
         try {
             JSONArray data = jsonObject.getJSONObject("result").getJSONArray("results");
-
+            mMap.clear();
             for (int i = 0; i < 100; i++) {
 
                 JSONObject object = data.getJSONObject(i);
                 String address = object.getString("PKROAD");//取得地址
 
-                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
                 if (!TextUtils.isEmpty(address)) {
                     //地址轉成經緯度
                     List<Address> location = geocoder.getFromLocationName(address, 1);
-                    if (location != null && location.size()>0) {
+                    if (location != null && location.size() > 0) {
                         double lat = location.get(0).getLatitude();
                         double lng = location.get(0).getLongitude();
 
-                            LatLng latLng = new LatLng(lat, lng);
-                            //加入地標
-                            mMap.addMarker(new MarkerOptions().position(latLng)
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons8_wheelchair_24))
-                                    .title(address));
-                        }
+                        LatLng latLng = new LatLng(lat, lng);
+                        //加入地標
+                        mMap.addMarker(new MarkerOptions().position(latLng)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons8_wheelchair_24))
+                                .title(address));
+                    }
                 }
 
             }
@@ -223,17 +232,80 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-
         }
     }
 
+    public void getSpeedCamData() {
+        AndroidNetworking.get("https://data.taipei/opendata/datalist/apiAccess")
+                .addQueryParameter("scope", "resourceAquire")
+                .addQueryParameter("rid", "5012e8ba-5ace-4821-8482-ee07c147fd0a")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsParsed(new TypeToken<Result<SpeedCamera>>() {
+                }, new ParsedRequestListener<Result<SpeedCamera>>() {
 
+                    @Override
+                    public void onResponse(Result<SpeedCamera> response) {
+                        speedCamList = response.getResult().getResults();
+                        mMap.clear();
+                        try {
+
+                            for (int i = 0; i < speedCamList.size(); i++) {
+                                SpeedCamera data = speedCamList.get(i);
+                                String address = data.getArea() + data.getRoad() + data.getLocation();
+                                if (!TextUtils.isEmpty(address)) {
+                                    List<Address> location = geocoder.getFromLocationName(address, 1);
+                                    if (location != null && location.size() > 0) {
+                                        double lat = location.get(0).getLatitude();
+                                        double lng = location.get(0).getLongitude();
+                                        LatLng latLng = new LatLng(lat, lng);
+                                        switch (data.getSpeed_limit()) {
+                                            case "40":
+                                                mMap.addMarker(new MarkerOptions().position(latLng)
+                                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_40))
+                                                        .title(address));
+                                                break;
+                                            case "50":
+                                                mMap.addMarker(new MarkerOptions().position(latLng)
+                                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_50))
+                                                        .title(address));
+                                                break;
+                                            case "60":
+                                                mMap.addMarker(new MarkerOptions().position(latLng)
+                                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_60))
+                                                        .title(address));
+                                                break;
+
+                                        }
+
+                                    }
+
+
+                                }
+
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+
+
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        switch (position){
+        switch (position) {
             case 1://愛心停車格
                 getParkingData();
+                break;
+            case 2://測速照相
+                getSpeedCamData();
                 break;
         }
     }
