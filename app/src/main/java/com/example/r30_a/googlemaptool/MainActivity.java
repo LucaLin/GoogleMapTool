@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.android.volley.Response;
@@ -30,6 +31,7 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.example.r30_a.googlemaptool.data.Result;
 import com.example.r30_a.googlemaptool.data.SpeedCamera;
+import com.example.r30_a.googlemaptool.view.MyCustomSearchView;
 import com.example.r30_a.googlemaptool.view.MyFloatButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -61,6 +63,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private List<SpeedCamera> speedCamList = new ArrayList<>();
     Geocoder geocoder;
 
+    //搜尋欄
+    private MyCustomSearchView searchView;
+
     public static final int LOCATION_UPDATE_MIN_DISTANCE = 2000;
     public static final int LOCATION_UPDATE_MIN_TIME = 5000;
 
@@ -69,6 +74,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+
         AndroidNetworking.initialize(getApplicationContext());
 
 
@@ -91,6 +97,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mapSpinner = (Spinner) findViewById(R.id.mapSpinner);
         mapSpinner.setAdapter(adapter);
         mapSpinner.setOnItemSelectedListener(this);
+
+        searchView = new MyCustomSearchView(this);
+        searchView.edtInput = (EditText) findViewById(R.id.search_input_text);
+        searchView.btnStartSearch = (View) findViewById(R.id.start_search_button);
+        searchView.btnStartSearch.setOnClickListener(this);
 
     }
 
@@ -175,7 +186,18 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
+                mMap.clear();
                 getCurrentLocation();
+                break;
+            case R.id.start_search_button:
+                String address = searchView.edtInput.getText().toString();
+                LatLng latLng = getAddToLatLng(address);
+                if(latLng != null){
+                    mMap.clear();
+                    mMap.addMarker(new MarkerOptions().position(latLng)
+                            .title(address));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+                }
                 break;
 
         }
@@ -213,28 +235,28 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if (!TextUtils.isEmpty(address)) {
                     //地址轉成經緯度
-                    List<Address> location = geocoder.getFromLocationName(address, 1);
-                    if (location != null && location.size() > 0) {
-                        double lat = location.get(0).getLatitude();
-                        double lng = location.get(0).getLongitude();
+                    LatLng latLng = getAddToLatLng(address);
+//                    List<Address> location = geocoder.getFromLocationName(address, 1);
+//                    if (location != null && location.size() > 0) {
+//                        double lat = location.get(0).getLatitude();
+//                        double lng = location.get(0).getLongitude();
+//
+//                        LatLng latLng = new LatLng(lat, lng);
+                    //加入地標
+                    mMap.addMarker(new MarkerOptions().position(latLng)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons8_wheelchair_24))
+                            .title(address));
 
-                        LatLng latLng = new LatLng(lat, lng);
-                        //加入地標
-                        mMap.addMarker(new MarkerOptions().position(latLng)
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons8_wheelchair_24))
-                                .title(address));
-                    }
                 }
 
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
+    //------取得北市各路段測速照相區域與速限標示
     public void getSpeedCamData() {
         AndroidNetworking.get("https://data.taipei/opendata/datalist/apiAccess")
                 .addQueryParameter("scope", "resourceAquire")
@@ -248,44 +270,38 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     public void onResponse(Result<SpeedCamera> response) {
                         speedCamList = response.getResult().getResults();
                         mMap.clear();
-                        try {
 
-                            for (int i = 0; i < speedCamList.size(); i++) {
-                                SpeedCamera data = speedCamList.get(i);
-                                String address = data.getArea() + data.getRoad() + data.getLocation();
-                                if (!TextUtils.isEmpty(address)) {
-                                    List<Address> location = geocoder.getFromLocationName(address, 1);
-                                    if (location != null && location.size() > 0) {
-                                        double lat = location.get(0).getLatitude();
-                                        double lng = location.get(0).getLongitude();
-                                        LatLng latLng = new LatLng(lat, lng);
-                                        switch (data.getSpeed_limit()) {
-                                            case "40":
-                                                mMap.addMarker(new MarkerOptions().position(latLng)
-                                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_40))
-                                                        .title(address));
-                                                break;
-                                            case "50":
-                                                mMap.addMarker(new MarkerOptions().position(latLng)
-                                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_50))
-                                                        .title(address));
-                                                break;
-                                            case "60":
-                                                mMap.addMarker(new MarkerOptions().position(latLng)
-                                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_60))
-                                                        .title(address));
-                                                break;
-
-                                        }
-
-                                    }
-
+                        for (int i = 0; i < speedCamList.size(); i++) {
+                            SpeedCamera data = speedCamList.get(i);
+                            String address = data.getArea() + data.getRoad() + data.getLocation();
+                            if (!TextUtils.isEmpty(address)) {
+                                LatLng latLng = getAddToLatLng(address);
+//                                    List<Address> location = geocoder.getFromLocationName(address, 1);
+//                                    if (location != null && location.size() > 0) {
+//                                        double lat = location.get(0).getLatitude();
+//                                        double lng = location.get(0).getLongitude();
+//                                        LatLng latLng = new LatLng(lat, lng);
+                                switch (data.getSpeed_limit()) {
+                                    case "40":
+                                        mMap.addMarker(new MarkerOptions().position(latLng)
+                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_40))
+                                                .title(address));
+                                        break;
+                                    case "50":
+                                        mMap.addMarker(new MarkerOptions().position(latLng)
+                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_50))
+                                                .title(address));
+                                        break;
+                                    case "60":
+                                        mMap.addMarker(new MarkerOptions().position(latLng)
+                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_60))
+                                                .title(address));
+                                        break;
 
                                 }
 
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
+
                         }
                     }
 
@@ -313,5 +329,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    public LatLng getAddToLatLng(String address) {
+        List<Address> location = null;
+        LatLng latLng = null;
+        try {
+            location = geocoder.getFromLocationName(address, 1);
+            if (location != null && location.size() > 0) {
+                double lat = location.get(0).getLatitude();
+                double lng = location.get(0).getLongitude();
+                latLng = new LatLng(lat, lng);
+                return latLng;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return latLng;
     }
 }

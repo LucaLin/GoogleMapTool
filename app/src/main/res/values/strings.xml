@@ -8,4 +8,6 @@
         <item>測速照相</item>
 
     </string-array>
+
+    <string name="enterAdd">請輸入要查找的地址</string>
 </resources>
