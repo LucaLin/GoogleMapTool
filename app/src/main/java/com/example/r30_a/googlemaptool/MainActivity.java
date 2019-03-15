@@ -192,11 +192,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             case R.id.start_search_button:
                 String address = searchView.edtInput.getText().toString();
                 LatLng latLng = getAddToLatLng(address);
-                if(latLng != null){
+                if (latLng != null) {
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions().position(latLng)
                             .title(address));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                 }
                 break;
 
@@ -243,9 +243,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //
 //                        LatLng latLng = new LatLng(lat, lng);
                     //加入地標
-                    mMap.addMarker(new MarkerOptions().position(latLng)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons8_wheelchair_24))
-                            .title(address));
+                    if (latLng != null) {
+                        mMap.addMarker(new MarkerOptions().position(latLng)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons8_wheelchair_24))
+                                .title(address));
+                    }
 
                 }
 
@@ -276,30 +278,26 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                             String address = data.getArea() + data.getRoad() + data.getLocation();
                             if (!TextUtils.isEmpty(address)) {
                                 LatLng latLng = getAddToLatLng(address);
-//                                    List<Address> location = geocoder.getFromLocationName(address, 1);
-//                                    if (location != null && location.size() > 0) {
-//                                        double lat = location.get(0).getLatitude();
-//                                        double lng = location.get(0).getLongitude();
-//                                        LatLng latLng = new LatLng(lat, lng);
-                                switch (data.getSpeed_limit()) {
-                                    case "40":
-                                        mMap.addMarker(new MarkerOptions().position(latLng)
-                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_40))
-                                                .title(address));
-                                        break;
-                                    case "50":
-                                        mMap.addMarker(new MarkerOptions().position(latLng)
-                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_50))
-                                                .title(address));
-                                        break;
-                                    case "60":
-                                        mMap.addMarker(new MarkerOptions().position(latLng)
-                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_60))
-                                                .title(address));
-                                        break;
+                                if (latLng != null) {
+                                    switch (data.getSpeed_limit()) {
+                                        case "40":
+                                            mMap.addMarker(new MarkerOptions().position(latLng)
+                                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_40))
+                                                    .title(address));
+                                            break;
+                                        case "50":
+                                            mMap.addMarker(new MarkerOptions().position(latLng)
+                                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_50))
+                                                    .title(address));
+                                            break;
+                                        case "60":
+                                            mMap.addMarker(new MarkerOptions().position(latLng)
+                                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_60))
+                                                    .title(address));
+                                            break;
 
+                                    }
                                 }
-
                             }
 
                         }
@@ -328,10 +326,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
+    //將地址轉成經緯度坐標
     public LatLng getAddToLatLng(String address) {
+
         List<Address> location = null;
         LatLng latLng = null;
         try {

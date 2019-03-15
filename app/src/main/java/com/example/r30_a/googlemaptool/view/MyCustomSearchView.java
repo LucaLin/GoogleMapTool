@@ -54,9 +54,7 @@ public class MyCustomSearchView extends FrameLayout implements View.OnClickListe
         search_close_view = (RelativeLayout)this.findViewById(R.id.search_closed_view);
         search_open_view = (RelativeLayout)this.findViewById(R.id.search_open_view);
 
-
         edtInput = (EditText)this.findViewById(R.id.search_input_text);
-
 
     }
 
