@@ -59,13 +59,14 @@ import java.util.Set;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
+
     private GoogleMap mMap;
     private LocationManager locationManager;
     private MyFloatButton floatButton;
     private double gpsLat, gpsLng;
     private Spinner mapSpinner;
-    private List<SpeedCamera> speedCamList = new ArrayList<>();
-    private List<LinkedTreeMap<String, String>> dragPosList = new ArrayList<>();
+    private List <LinkedTreeMap<String,String>>speedCamList = new ArrayList<>();
+    private List <LinkedTreeMap<String,String>>dragPosList = new ArrayList<>();
     Geocoder geocoder;
 
     //搜尋欄
@@ -84,6 +85,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         getCurrentLocation();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
 
     }
 
@@ -257,20 +265,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     //台北市拖吊場位置分布資料
     public void getDragPos() {
-//        String dataSrc = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=24045907-b7c3-4351-b0b8-b93a54b55367";
-//        JsonObjectRequest objectRequest = new JsonObjectRequest(dataSrc,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        parseJson(response);
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.e("ResponseError:", error.toString());
-//            }
-//        });
-//        Volley.newRequestQueue(this).add(objectRequest);
         AndroidNetworking.get("https://data.taipei/opendata/datalist/apiAccess")
                 .addQueryParameter("scope", "resourceAquire")
                 .addQueryParameter("rid", "24045907-b7c3-4351-b0b8-b93a54b55367")
@@ -282,12 +276,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     public void onResponse(Result<DragPosData> response) {
                         dragPosList = response.getResult().getResults();
                         mMap.clear();
-
+                        DragPosData data = new DragPosData();
                         for (int i = 0; i < dragPosList.size(); i++) {
-                            DragPosData data = new DragPosData();
+                            LinkedTreeMap<String,String > map = dragPosList.get(i);
 
-                            String address = dragPosList.get(i).get(data.getAddress());
-                            String phoneNum = dragPosList.get(i).get(data.getPhoneNumber());
+                            String address = map.get(data.getAddress());
+                            String phoneNum = map.get(data.getPhoneNumber());
                             if (!TextUtils.isEmpty(address)) {
                                 LatLng latLng = getAddToLatLng(address);
                                 if (latLng != null) {
@@ -324,16 +318,18 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
                     @Override
                     public void onResponse(Result<SpeedCamera> response) {
-                        speedCamList = response.getResult().getResults();
+
+                        speedCamList =response.getResult().getResults();
                         mMap.clear();
+                        SpeedCamera data = new SpeedCamera();
 
                         for (int i = 0; i < speedCamList.size(); i++) {
-                            SpeedCamera data = speedCamList.get(i);
-                            String address = data.getArea() + data.getRoad() + data.getLocation();
+                            LinkedTreeMap<String,String > map =  speedCamList.get(i);
+                            String address = map.get(data.getArea()) + map.get(data.getRoad()) + map.get(data.getLocation());
                             if (!TextUtils.isEmpty(address)) {
                                 LatLng latLng = getAddToLatLng(address);
                                 if (latLng != null) {
-                                    switch (data.getSpeed_limit()) {
+                                    switch (map.get(data.getSpeed_limit())) {
                                         case "40":
                                             mMap.addMarker(new MarkerOptions().position(latLng)
                                                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.speed_limit_40))
@@ -373,11 +369,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 getParkingData();
                 break;
             case 2://測速照相
-                getSpeedCamData();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getSpeedCamData();
+                    }
+                }).start();
+
                 break;
             case 3://拖吊場位置
                 getDragPos();
-                ;
+
         }
     }
 

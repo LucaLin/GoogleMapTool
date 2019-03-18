@@ -16,13 +16,13 @@ public class Results<T> {
     int count;
     String sort;
     List<T> results;
-    LinkedTreeMap<T,T> mapResults;
+    List<LinkedTreeMap<T,T>> mapResults;
 
-    public LinkedTreeMap<T, T> getMapResults() {
+    public List<LinkedTreeMap<T,T>> getMapResults() {
         return mapResults;
     }
 
-    public void setMapResults(LinkedTreeMap<T, T> mapResults) {
+    public void setMapResults(List<LinkedTreeMap<T,T>> mapResults) {
         this.mapResults = mapResults;
     }
 
