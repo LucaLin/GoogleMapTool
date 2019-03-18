@@ -6,14 +6,14 @@ package com.example.r30_a.googlemaptool.data;
 
 public class SpeedCamera {
 
-    private String _id;
-    private String no;
-    private String functions;//監測功能
-    private String road;//路名
-    private String location;//地點
-    private String area;//區域
-    private String direction;//方向
-    private String speed_limit;//速限
+    private String _id = "_id";
+    private String no = "no";
+    private String functions = "functions";//監測功能
+    private String road = "road";//路名
+    private String location = "location";//地點
+    private String area = "area";//區域
+    private String direction = "direction";//方向
+    private String speed_limit = "speed_limit";//速限
 
     public String get_id() {
         return _id;
