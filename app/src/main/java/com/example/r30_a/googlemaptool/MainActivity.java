@@ -29,8 +29,10 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.ParsedRequestListener;
+import com.example.r30_a.googlemaptool.data.DragPosData;
 import com.example.r30_a.googlemaptool.data.Result;
 import com.example.r30_a.googlemaptool.data.SpeedCamera;
+import com.example.r30_a.googlemaptool.view.MyCustomInfoWindow;
 import com.example.r30_a.googlemaptool.view.MyCustomSearchView;
 import com.example.r30_a.googlemaptool.view.MyFloatButton;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -40,6 +42,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
@@ -49,6 +52,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -61,6 +65,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private double gpsLat, gpsLng;
     private Spinner mapSpinner;
     private List<SpeedCamera> speedCamList = new ArrayList<>();
+    private List<LinkedTreeMap<String, String>> dragPosList = new ArrayList<>();
     Geocoder geocoder;
 
     //搜尋欄
@@ -75,9 +80,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_main);
         init();
 
-        AndroidNetworking.initialize(getApplicationContext());
-
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -86,6 +88,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void init() {
+        AndroidNetworking.initialize(getApplicationContext());
         geocoder = new Geocoder(this, Locale.getDefault());
         floatButton = (MyFloatButton) findViewById(R.id.fab);
         floatButton.setOnClickListener(this);
@@ -104,7 +107,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         searchView.btnStartSearch.setOnClickListener(this);
 
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -236,12 +238,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 if (!TextUtils.isEmpty(address)) {
                     //地址轉成經緯度
                     LatLng latLng = getAddToLatLng(address);
-//                    List<Address> location = geocoder.getFromLocationName(address, 1);
-//                    if (location != null && location.size() > 0) {
-//                        double lat = location.get(0).getLatitude();
-//                        double lng = location.get(0).getLongitude();
-//
-//                        LatLng latLng = new LatLng(lat, lng);
+
                     //加入地標
                     if (latLng != null) {
                         mMap.addMarker(new MarkerOptions().position(latLng)
@@ -256,6 +253,63 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    //台北市拖吊場位置分布資料
+    public void getDragPos() {
+//        String dataSrc = "https://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=24045907-b7c3-4351-b0b8-b93a54b55367";
+//        JsonObjectRequest objectRequest = new JsonObjectRequest(dataSrc,
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        parseJson(response);
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.e("ResponseError:", error.toString());
+//            }
+//        });
+//        Volley.newRequestQueue(this).add(objectRequest);
+        AndroidNetworking.get("https://data.taipei/opendata/datalist/apiAccess")
+                .addQueryParameter("scope", "resourceAquire")
+                .addQueryParameter("rid", "24045907-b7c3-4351-b0b8-b93a54b55367")
+                .setPriority(Priority.HIGH)
+                .build()
+                .getAsParsed(new TypeToken<Result<DragPosData>>() {
+                }, new ParsedRequestListener<Result<DragPosData>>() {
+                    @Override
+                    public void onResponse(Result<DragPosData> response) {
+                        dragPosList = response.getResult().getResults();
+                        mMap.clear();
+
+                        for (int i = 0; i < dragPosList.size(); i++) {
+                            DragPosData data = new DragPosData();
+
+                            String address = dragPosList.get(i).get(data.getAddress());
+                            String phoneNum = dragPosList.get(i).get(data.getPhoneNumber());
+                            if (!TextUtils.isEmpty(address)) {
+                                LatLng latLng = getAddToLatLng(address);
+                                if (latLng != null) {
+                                    mMap.addMarker(new MarkerOptions()
+                                            .position(latLng)
+                                            .title(address)
+                                            .snippet(phoneNum)
+                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.icons8_dragpos)));
+                                    mMap.setInfoWindowAdapter(new MyCustomInfoWindow(getLayoutInflater()));
+                                }
+
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+
+                    }
+                });
+
     }
 
     //------取得北市各路段測速照相區域與速限標示
@@ -321,6 +375,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             case 2://測速照相
                 getSpeedCamData();
                 break;
+            case 3://拖吊場位置
+                getDragPos();
+                ;
         }
     }
 

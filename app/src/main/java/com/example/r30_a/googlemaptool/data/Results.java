@@ -1,5 +1,8 @@
 package com.example.r30_a.googlemaptool.data;
 
+import com.google.gson.internal.LinkedTreeMap;
+
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -12,7 +15,16 @@ public class Results<T> {
     int limit;
     int count;
     String sort;
-    List<SpeedCamera> results;
+    List<T> results;
+    LinkedTreeMap<T,T> mapResults;
+
+    public LinkedTreeMap<T, T> getMapResults() {
+        return mapResults;
+    }
+
+    public void setMapResults(LinkedTreeMap<T, T> mapResults) {
+        this.mapResults = mapResults;
+    }
 
     public int getOffset() {
         return offset;
@@ -46,11 +58,11 @@ public class Results<T> {
         this.sort = sort;
     }
 
-    public List<SpeedCamera> getResults() {
+    public List<T> getResults() {
         return results;
     }
 
-    public void setResults(List<SpeedCamera> results) {
+    public void setResults(List<T> results) {
         this.results = results;
     }
 }
