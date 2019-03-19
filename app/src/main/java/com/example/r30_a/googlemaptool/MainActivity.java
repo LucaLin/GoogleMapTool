@@ -41,7 +41,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.internal.zzp;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.reflect.TypeToken;
 
@@ -62,17 +64,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private LocationManager locationManager;
-    private MyFloatButton floatButton;
+//    private MyFloatButton floatButton;
     private double gpsLat, gpsLng;
     private Spinner mapSpinner;
-    private List <LinkedTreeMap<String,String>>speedCamList = new ArrayList<>();
-    private List <LinkedTreeMap<String,String>>dragPosList = new ArrayList<>();
+    private List<LinkedTreeMap<String, String>> speedCamList = new ArrayList<>();
+    private List<LinkedTreeMap<String, String>> dragPosList = new ArrayList<>();
     Geocoder geocoder;
 
     //搜尋欄
     private MyCustomSearchView searchView;
 
-    public static final int LOCATION_UPDATE_MIN_DISTANCE = 2000;
+    public static final int LOCATION_UPDATE_MIN_DISTANCE = 1000;
     public static final int LOCATION_UPDATE_MIN_TIME = 5000;
 
     @Override
@@ -98,8 +100,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private void init() {
         AndroidNetworking.initialize(getApplicationContext());
         geocoder = new Geocoder(this, Locale.getDefault());
-        floatButton = (MyFloatButton) findViewById(R.id.fab);
-        floatButton.setOnClickListener(this);
+//        floatButton = (MyFloatButton) findViewById(R.id.fab);
+//        floatButton.setOnClickListener(this);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -114,11 +116,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         searchView.btnStartSearch = (View) findViewById(R.id.start_search_button);
         searchView.btnStartSearch.setOnClickListener(this);
 
+
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
         getCurrentLocation();//取得當前定位
 
     }
@@ -127,6 +134,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         public void onLocationChanged(Location location) {
             if (location != null) {
+
                 drawMarker(location);
             }
         }
@@ -146,7 +154,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void drawMarker(Location location) {
         if (mMap != null) {
-
+            mMap.clear();
             gpsLat = location.getLatitude();
             gpsLng = location.getLongitude();
             LatLng gps = new LatLng(gpsLat, gpsLng);
@@ -195,10 +203,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.fab:
-                mMap.clear();
-                getCurrentLocation();
-                break;
+//            case R.id.fab:
+//                mMap.clear();
+//                getCurrentLocation();
+//                break;
             case R.id.start_search_button:
                 String address = searchView.edtInput.getText().toString();
                 LatLng latLng = getAddToLatLng(address);
@@ -237,6 +245,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             JSONArray data = jsonObject.getJSONObject("result").getJSONArray("results");
             mMap.clear();
+
             for (int i = 0; i < 100; i++) {
 
                 JSONObject object = data.getJSONObject(i);

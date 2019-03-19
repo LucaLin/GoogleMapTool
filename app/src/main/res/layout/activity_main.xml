@@ -22,16 +22,16 @@
 
     </fragment>
 
-    <com.example.r30_a.googlemaptool.view.MyFloatButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="40dp"
-        android:elevation="18dp"
-        android:src="@drawable/icons8_email_send_24" />
+    <!--<com.example.r30_a.googlemaptool.view.MyFloatButton-->
+        <!--android:id="@+id/fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_marginRight="40dp"-->
+        <!--android:layout_marginTop="40dp"-->
+        <!--android:elevation="18dp"-->
+        <!--android:src="@drawable/icons8_email_send_24" />-->
 
     <com.example.r30_a.googlemaptool.view.MyCustomSearchView
         android:id="@+id/myCustomSearchView"
