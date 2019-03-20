@@ -2,6 +2,18 @@
     <string name="app_name">GoogleMapTool</string>
     <string name="title_activity_main">Map</string>
 
+    <!--功能標題-->
+    <string name="baseMap">預設樣式</string>
+    <string name="CameraMap">鏡頭自定義樣式</string>
+
+    <!--按鈕文字-->
+    <string name="animate">動畫效果</string>
+    <string name="zoom">遠近</string>
+    <string name="tilt">傾斜</string>
+    <string name="aniDuration">動畫速度</string>
+
+
+
     <string-array name="mapSpinnerList">
         <item>請選擇要顯示的項目</item>
         <item>愛心停車格</item>
@@ -10,5 +22,19 @@
 
     </string-array>
 
+    <string-array name="map_style">
+
+        <item>預設</item>
+        <item>復古</item>
+        <item>夜晚</item>
+        <item>灰景</item>
+
+    </string-array>
+
+
+    <string name="style_choose">地圖風格</string>
+
     <string name="enterAdd">請輸入要查找的地址</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_camera_maps">Map</string>
 </resources>

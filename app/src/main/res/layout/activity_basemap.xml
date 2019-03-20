@@ -1,0 +1,56 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.r30_a.googlemaptool.BaseMapActivity">
+
+    <!--<Spinner-->
+        <!--android:id="@+id/mapSpinner"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/myCustomSearchView">
+        <!--android:layout_below="@+id/mapSpinner"-->
+
+        <!--class="com.google.android.gms.maps.SupportMapFragment">-->
+
+
+    </fragment>
+
+    <!--<com.example.r30_a.googlemaptool.view.MyFloatButton-->
+    <!--android:id="@+id/fab"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignParentTop="true"-->
+    <!--android:layout_marginRight="40dp"-->
+    <!--android:layout_marginTop="40dp"-->
+    <!--android:elevation="18dp"-->
+    <!--android:src="@drawable/icons8_email_send_24" />-->
+
+    <com.example.r30_a.googlemaptool.view.MyCustomSearchView
+        android:id="@+id/myCustomSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:layout_alignParentBottom="false">
+
+    </com.example.r30_a.googlemaptool.view.MyCustomSearchView>
+</RelativeLayout>
+
+<!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--xmlns:map="http://schemas.android.com/apk/res-auto"-->
+<!--xmlns:tools="http://schemas.android.com/tools"-->
+<!--android:id="@+id/map"-->
+<!--android:name="com.google.android.gms.maps.SupportMapFragment"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="wrap_content"-->
+<!--tools:contecom.example.r30_a.googlemaptool.BaseMapActivityityvity">-->
+
+<!--</fragment>-->

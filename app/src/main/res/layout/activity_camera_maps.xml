@@ -1,0 +1,156 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeff"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Switch
+                android:id="@+id/animateSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="@string/animate" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp">
+
+            <Button
+                android:id="@+id/btn_up"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/btn_left"
+                android:text="↑" />
+
+            <Button
+                android:id="@+id/btn_down"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/btn_left"
+                android:layout_toEndOf="@+id/btn_left"
+                android:text="↓" />
+
+            <Button
+                android:id="@+id/btn_left"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/btn_up"
+                android:text="←" />
+
+            <Button
+                android:id="@+id/btn_right"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/btn_up"
+                android:layout_toEndOf="@+id/btn_up"
+                android:text="→" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/zoom" />
+
+            <Button
+                android:id="@+id/btn_zoomIn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="+" />
+
+            <Button
+                android:id="@+id/btn_zoomOut"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="-" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/tilt" />
+
+            <Button
+                android:id="@+id/btn_tiltUp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="↑" />
+
+            <Button
+                android:id="@+id/btn_tiltDown"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="↓" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/aniDuration" />
+
+        <SeekBar
+            android:id="@+id/durationBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/btn_right"
+        android:layout_marginTop="10dp"
+        tools:context="com.example.r30_a.googlemaptool.CameraMapsActivity" />
+
+</LinearLayout>
+
+
+
+
