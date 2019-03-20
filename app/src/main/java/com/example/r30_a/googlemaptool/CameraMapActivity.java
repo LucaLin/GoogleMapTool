@@ -17,7 +17,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class CameraMapsActivity extends FragmentActivity implements OnMapReadyCallback
+public class CameraMapActivity extends FragmentActivity implements OnMapReadyCallback
         ,View.OnClickListener {
 
     private GoogleMap mMap;

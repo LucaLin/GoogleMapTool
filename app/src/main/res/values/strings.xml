@@ -5,13 +5,18 @@
     <!--功能標題-->
     <string name="baseMap">預設樣式</string>
     <string name="CameraMap">鏡頭自定義樣式</string>
+    <string name="styleMap">主題地圖</string>
 
     <!--按鈕文字-->
     <string name="animate">動畫效果</string>
     <string name="zoom">遠近</string>
     <string name="tilt">傾斜</string>
     <string name="aniDuration">動畫速度</string>
-
+    
+    <string name="defaultMap">預設</string>
+    <string name="retroMap">復古</string>
+    <string name="nightMap">夜晚</string>
+    <string name="grayMap">灰景</string>
 
 
     <string-array name="mapSpinnerList">
@@ -37,4 +42,5 @@
     <string name="enterAdd">請輸入要查找的地址</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_camera_maps">Map</string>
+    <string name="title_activity_style_map">Map</string>
 </resources>

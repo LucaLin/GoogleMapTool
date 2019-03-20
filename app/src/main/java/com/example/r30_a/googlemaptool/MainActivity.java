@@ -10,6 +10,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Button btn_BaseMap;
     Button btn_CameraMap;
+    Button btn_StyleMap;
 
 
     @Override
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_BaseMap.setOnClickListener(this);
         btn_CameraMap = (Button)findViewById(R.id.btn_CameraMap);
         btn_CameraMap.setOnClickListener(this);
+        btn_StyleMap = (Button)findViewById(R.id.btn_StyleMap);
+        btn_StyleMap.setOnClickListener(this);
     }
 
     @Override
@@ -35,7 +38,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this,BaseMapActivity.class));
                 break;
             case R.id.btn_CameraMap:
-                startActivity(new Intent(this,CameraMapsActivity.class));
+                startActivity(new Intent(this,CameraMapActivity.class));
+                break;
+            case R.id.btn_StyleMap:
+                startActivity(new Intent(this,StyleMapActivity.class));
                 break;
         }
     }
