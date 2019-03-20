@@ -17,6 +17,13 @@
     <string name="retroMap">復古</string>
     <string name="nightMap">夜晚</string>
     <string name="grayMap">灰景</string>
+    <string name="aubergine">茄子風</string>
+    <string name="megazineMap">都會雜誌</string>
+    <string name="goldenAge">黃金年代</string>
+    <string name="black_white">簡約黑白</string>
+    <string name="iceAge">冰雪奇緣</string>
+    <string name="modern">摩登時代</string>
+    <string name="redAlert">紅色警戒</string>
 
 
     <string-array name="mapSpinnerList">

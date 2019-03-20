@@ -24,6 +24,9 @@ import static com.example.r30_a.googlemaptool.BaseMapActivity.LOCATION_UPDATE_MI
 
 public class StyleMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
+//    地圖樣式來源：https://snazzymaps.com/explore?sort=popular
+
+
     private GoogleMap mMap;
     private LocationManager locationManager;
     private RadioGroup mapGroup;
@@ -42,12 +45,12 @@ public class StyleMapActivity extends FragmentActivity implements OnMapReadyCall
 
     private void init() {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        mapGroup = (RadioGroup)findViewById(R.id.radioGroup);
+        mapGroup = (RadioGroup) findViewById(R.id.radioGroup);
         mapGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.rb_default:
                         mMap.setMapStyle(null);
                         break;
@@ -60,6 +63,27 @@ public class StyleMapActivity extends FragmentActivity implements OnMapReadyCall
                     case R.id.rb_gray://灰景
                         setMapStyle(R.raw.mapstyle_grayscale);
                         break;
+                    case R.id.rb_aubergine://茄子風
+                        setMapStyle(R.raw.aubergine);
+                        break;
+                    case R.id.rb_megazineMap://都會雜誌
+                        setMapStyle(R.raw.magazinemap);
+                        break;
+                    case R.id.rb_goldenAge://黃金年代
+                        setMapStyle(R.raw.goldenage);
+                        break;
+                    case R.id.rb_blackAndWhite://簡約黑白
+                        setMapStyle(R.raw.blackwhite);
+                        break;
+                    case R.id.rb_iceAge://冰雪奇緣
+                        setMapStyle(R.raw.ice_age);
+                        break;
+                    case R.id.rb_modern://摩登時代
+                        setMapStyle(R.raw.modern);
+                        break;
+                    case R.id.rb_redAlert://紅色警戒
+                        setMapStyle(R.raw.redalert);
+                        break;
 
                 }
             }
@@ -67,8 +91,13 @@ public class StyleMapActivity extends FragmentActivity implements OnMapReadyCall
     }
 
     private void setMapStyle(int mapstyle) {
-        MapStyleOptions options = MapStyleOptions.loadRawResourceStyle(this,mapstyle);
+        MapStyleOptions options = MapStyleOptions.loadRawResourceStyle(this, mapstyle);
         mMap.setMapStyle(options);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
 
     }
 
