@@ -24,6 +24,22 @@
 
     </fragment>
 
+    <TextView
+        android:id="@+id/txvlat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/map"
+        android:layout_alignParentStart="true"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/txvlng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txvlat"
+        android:layout_alignParentStart="true"
+        android:text="TextView" />
+
     <!--<com.example.r30_a.googlemaptool.view.MyFloatButton-->
     <!--android:id="@+id/fab"-->
     <!--android:layout_width="wrap_content"-->

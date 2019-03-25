@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -69,7 +70,7 @@ public class BaseMapActivity extends FragmentActivity implements OnMapReadyCallb
 
     UiSettings uiSettings;
 
-
+    TextView txvlat,txvlng;
 
     //搜尋欄
     private MyCustomSearchView searchView;
@@ -145,7 +146,8 @@ public class BaseMapActivity extends FragmentActivity implements OnMapReadyCallb
         searchView.btnStartSearch = (View) findViewById(R.id.start_search_button);
         searchView.btnStartSearch.setOnClickListener(this);
 
-
+        txvlat = (TextView)findViewById(R.id.txvlat);
+        txvlng = (TextView)findViewById(R.id.txvlng);
 
     }
 
@@ -442,6 +444,8 @@ public class BaseMapActivity extends FragmentActivity implements OnMapReadyCallb
                 double lat = location.get(0).getLatitude();
                 double lng = location.get(0).getLongitude();
                 latLng = new LatLng(lat, lng);
+                txvlat.setText(String.valueOf(lat));
+                txvlng.setText(String.valueOf(lng));
                 return latLng;
             }
         } catch (IOException e) {

@@ -6,13 +6,14 @@
     <string name="baseMap">預設樣式</string>
     <string name="CameraMap">鏡頭自定義樣式</string>
     <string name="styleMap">主題地圖</string>
+    <string name="HighSpeedRailAddMap">台灣高鐵位置地圖</string>
 
     <!--按鈕文字-->
     <string name="animate">動畫效果</string>
     <string name="zoom">遠近</string>
     <string name="tilt">傾斜</string>
     <string name="aniDuration">動畫速度</string>
-    
+
     <string name="defaultMap">預設</string>
     <string name="retroMap">復古</string>
     <string name="nightMap">夜晚</string>
@@ -24,6 +25,21 @@
     <string name="iceAge">冰雪奇緣</string>
     <string name="modern">摩登時代</string>
     <string name="redAlert">紅色警戒</string>
+
+
+    //車站名稱
+    <string name="nangangStation">南港站</string><string name="nangangAdd">台北市南港區南港路一段313號</string>
+    <string name="taipeiStation">台北站</string><string name="taipeiAdd">台北市北平西路3號</string>
+    <string name="banciaoStation">板橋站</string><string name="banCiaoAdd">新北市板橋區縣民大道二段7號</string>
+    <string name="taoyuanStation">桃園站</string><string name="taoYuanAdd">桃園市中壢區高鐵北路一段6號</string>
+    <string name="hisnZhuStation">新竹站</string><string name="hsinZhuAdd">新竹縣竹北市高鐵七路6號</string>
+    <string name="miaoLiStation">苗栗站</string><string name="miaoLiAdd">苗栗縣後龍鎮高鐵三路268號</string>
+    <string name="taiChungStation">台中站</string><string name="taiChungAdd">台中市烏日區站區二路8號</string>
+    <string name="changHuaStaion">彰化站</string><string name="changHuaAdd">彰化縣田中鎮站區路二段99號</string>
+    <string name="yunLingStation">雲林站</string><string name="yunLingAdd">雲林縣虎尾鎮站前東路301號</string>
+    <string name="chiaYiStation">嘉義站</string><string name="chiaYiAdd">嘉義縣太保市高鐵西路168號</string>
+    <string name="taiNangStation">台南站</string><string name="taiNangAdd">台南市歸仁區歸仁大道100號</string>
+    <string name="ZuoYingStation">左營站</string><string name="ZhoYingAdd">高雄市左營區高鐵路105號</string>
 
 
     <string-array name="mapSpinnerList">

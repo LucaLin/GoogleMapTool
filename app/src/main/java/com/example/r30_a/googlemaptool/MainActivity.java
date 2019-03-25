@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btn_BaseMap;
     Button btn_CameraMap;
     Button btn_StyleMap;
+    Button btn_HighSpeedRailMap;
 
 
     @Override
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn_CameraMap.setOnClickListener(this);
         btn_StyleMap = (Button)findViewById(R.id.btn_StyleMap);
         btn_StyleMap.setOnClickListener(this);
+        btn_HighSpeedRailMap = (Button)findViewById(R.id.btn_LocationListMap);
+        btn_HighSpeedRailMap.setOnClickListener(this);
     }
 
     @Override
@@ -37,11 +40,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_BaseMap://基本樣式
                 startActivity(new Intent(this,BaseMapActivity.class));
                 break;
-            case R.id.btn_CameraMap:
+            case R.id.btn_CameraMap://基本鏡頭地圖
                 startActivity(new Intent(this,CameraMapActivity.class));
                 break;
-            case R.id.btn_StyleMap:
+            case R.id.btn_StyleMap://主題地圖
                 startActivity(new Intent(this,StyleMapActivity.class));
+                break;
+            case R.id.btn_LocationListMap://高鐵地址分布地圖
+                startActivity(new Intent(this,LocationListActivity.class));
                 break;
         }
     }

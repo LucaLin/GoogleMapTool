@@ -45,7 +45,8 @@
             android:label="@string/title_activity_camera_maps" />
         <activity
             android:name=".StyleMapActivity"
-            android:label="@string/title_activity_style_map"></activity>
+            android:label="@string/title_activity_style_map" />
+        <activity android:name=".LocationListActivity"></activity>
     </application>
 
 </manifest>
