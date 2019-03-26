@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_style_choose"
-        android:title="@string/style_choose"
+        android:id="@+id/menu_locationAdd"
+        android:title="@string/locationMapAdd"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menu_locationInTaiwan"
+        android:title="@string/locationIntaiwan"
         app:showAsAction="always"/>
 </menu>

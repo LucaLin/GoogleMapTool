@@ -20,15 +20,25 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.xml.sax.Locator;
 
+import java.util.ArrayList;
+
 public class MyLocationAdapter extends RecyclerView.Adapter<MyLocationAdapter.ViewHolder> {
 
     private LocationData[] locationData;
     private Context context;
+    private ArrayList<String> locationAddList;
+    private ArrayList<String> locationNameList;
 
-    public MyLocationAdapter(Context context, LocationData[] locationData) {
+    public MyLocationAdapter(Context context,LocationData[] locationData) {
         this.context = context;
         this.locationData = locationData;
+//        this.locationAddList = new ArrayList<>();
+//        this.locationAddList = locationAddList;
+//
+//        this.locationNameList = new ArrayList<>();
+//        this.locationNameList = locationNameList;
     }
+
 
     @NonNull
     @Override
@@ -41,7 +51,11 @@ public class MyLocationAdapter extends RecyclerView.Adapter<MyLocationAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (holder == null) return;
+//        holder.txvLocationTitle.setText(locationNameList.get(position));
+//        holder.txvLocationAdd.setText(locationAddList.get(position));
         holder.bindView(position);
+
+
     }
 
     @Override
