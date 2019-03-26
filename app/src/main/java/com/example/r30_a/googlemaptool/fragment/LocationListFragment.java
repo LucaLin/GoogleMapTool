@@ -19,6 +19,11 @@ import java.util.ArrayList;
 
 
 public class LocationListFragment extends Fragment {
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        recyclerView.removeAllViews();
+    }
 
     private Context context;
     private RecyclerView recyclerView;
@@ -38,6 +43,7 @@ public class LocationListFragment extends Fragment {
 
     public static LocationListFragment newInstance(Context context, LocationData[] datas) {
         LocationListFragment fragment = new LocationListFragment();
+
 
         ArrayList addList = new ArrayList<>();
         ArrayList nameList = new ArrayList();
